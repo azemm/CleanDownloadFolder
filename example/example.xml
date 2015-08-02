@@ -1,0 +1,10 @@
+<root>
+	<association>
+		<ext>.iso</ext>
+		<path>/home/user/folder</path>
+	</association>
+	<association>
+		<ext>.pdf</ext>
+		<path>/home/user/pdfDocs</path>
+	</association>
+</root>
