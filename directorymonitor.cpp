@@ -48,7 +48,7 @@ void DirectoryMonitor::monitor()
                     if ( event->len ) {
                         if ( event->mask & IN_CREATE ) {
                             if (!( event->mask & IN_ISDIR ) ) {
-                                auto path = boost::filesystem::path(directory.string() + "/" + event->name);
+                                boost::filesystem::path path(directory.string() + "/" + event->name);
                                 moveFile(path);
                             }
                         }
@@ -67,9 +67,9 @@ bool DirectoryMonitor::moveFile(boost::filesystem::path const &path)
     if(boost::filesystem::is_regular_file(path)
             && boost::starts_with(path.string(), directory.string())){
         std::string pathToMove = fileAssociation.getPath(path.extension().string());
-        auto dirToMove = boost::filesystem::path(pathToMove);
+        boost::filesystem::path dirToMove(pathToMove);
         if(pathToMove.length() > 0 && boost::filesystem::exists(dirToMove) && boost::filesystem::is_directory(dirToMove)){
-            auto dest = boost::filesystem::path(pathToMove + "/" + path.filename().string());
+            boost::filesystem::path dest(pathToMove + "/" + path.filename().string());
             boost::filesystem::rename(path, dest);
             std::cout << "File " << path.filename() << " moved to " << pathToMove << std::endl;
             return true;

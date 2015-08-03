@@ -8,7 +8,7 @@ SOURCES += main.cpp \
     directorymonitor.cpp \
     fileassociation.cpp
 
-LIBS += -lboost_system -lboost_filesystem
+LIBS += -lboost_system -lboost_filesystem -lboost_program_options
 
 include(deployment.pri)
 qtcAddDeployment()
