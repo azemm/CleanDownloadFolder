@@ -38,7 +38,7 @@ void DirectoryMonitor::monitor()
     int fd = inotify_init();
     int wd;
     if(fd > 0){
-        wd = inotify_add_watch(fd, directory.string().c_str(), IN_CREATE);
+        wd = inotify_add_watch(fd, directory.string().c_str(), (IN_CREATE|IN_MOVE));
         while(true){
             int i=0;
             int length = read(fd, buffer, BUF_LEN);
@@ -46,11 +46,9 @@ void DirectoryMonitor::monitor()
                 while(i < length){
                     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
                     if ( event->len ) {
-                        if ( event->mask & IN_CREATE ) {
-                            if (!( event->mask & IN_ISDIR ) ) {
-                                boost::filesystem::path path(directory.string() + "/" + event->name);
-                                moveFile(path);
-                            }
+                        if ( ((event->mask & IN_CREATE) || (event->mask & IN_MOVE)) && !( event->mask & IN_ISDIR ) ) {
+                            boost::filesystem::path path(directory.string() + "/" + event->name);
+                            moveFile(path);
                         }
                     }
                     i += EVENT_SIZE + event->len;
